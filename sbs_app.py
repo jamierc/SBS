@@ -6,6 +6,32 @@ import os
 # --- APP CONFIGURATION ---
 st.set_page_config(page_title="SBS Strength Tracker", page_icon="💪", layout="centered")
 
+# Custom CSS for Mobile Polish
+st.markdown("""
+<style>
+    /* Bigger Metrics */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+    }
+    /* Polish Expander */
+    .streamlit-expanderHeader {
+        background-color: #2D2D2D;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    /* Button Polish */
+    .stButton button {
+        width: 100%;
+        border-radius: 20px;
+        font-weight: bold;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 HISTORY_FILE = "workout_history.json"
 
 # --- DATA MAPPING (Extracted from your Spreadsheet) ---
@@ -246,8 +272,13 @@ for lift in today_exercises:
     prev_entry_key = f"{lift}_w{week}_d{day}"
     pre_filled_reps = history.get(prev_entry_key, {}).get("reps", stats['rep_out'])
     
-    # Calculate completion
-    completed_sets = sum([st.session_state.get(f"{lift}_{week}_{day}_s{i+1}", False) for i in range(stats['sets']-1)])
+    # Calculate completion (Check Pills State)
+    pills_key = f"{lift}_{week}_{day}_pills"
+    selected_pills = st.session_state.get(pills_key, [])
+    # Handle case where pills might be None
+    if selected_pills is None: selected_pills = []
+    
+    completed_sets = len(selected_pills)
     is_amrap_done = st.session_state.get(f"{lift}_{week}_{day}_amrap", 0) > 0
     total_completed = completed_sets + (1 if is_amrap_done else 0)
     
@@ -260,24 +291,39 @@ for lift in today_exercises:
                 st.text(log)
         
         # 1. Standard Sets Checkboxes
-        st.write(f"**Working Sets:** {stats['sets']-1} sets of {stats['reps']}")
-        set_cols = st.columns(stats['sets']-1)
-        for i, col in enumerate(set_cols):
-            col.checkbox(f"S{i+1}", key=f"{lift}_{week}_{day}_s{i+1}")
+        # Use st.pills for mobile-friendly tappable targets
+        set_labels = [str(i+1) for i in range(stats['sets']-1)]
+        
+        # We need to map the old checkbox state to pills if possible, or just start fresh.
+        # Since we just reset the logic, pills is cleaner.
+        # Logic: If user clicks "1", "2", "3", it counts as 3 sets.
+        # Key needs to be unique.
+        
+        selected_sets = st.pills(
+            "Completed Sets",
+            set_labels,
+            selection_mode="multi",
+            default=None, # Could load from history if we wanted complex state management, but keeping it simple for now
+            key=f"{lift}_{week}_{day}_pills"
+        )
+        
+        # Calculate completion based on how many pills are selected
+        completed_sets = len(selected_sets) if selected_sets else 0
             
         st.divider()
         
         # 2. Final AMRAP Set
-        c1, c2 = st.columns([1, 2])
-        c1.metric("Rep Out Goal", f"{stats['rep_out']}+")
+        c1, c2 = st.columns([1, 1]) # Equal width for better mobile layout
+        c1.metric("Target", f"{stats['rep_out']}+")
         
         # Default to the rep_out goal or saved value
         reps_done = c2.number_input(
-            f"Actual reps on final set", 
+            f"AMRAP Reps", 
             min_value=0, 
             max_value=50, 
             value=pre_filled_reps, 
-            key=f"{lift}_{week}_{day}_amrap"
+            key=f"{lift}_{week}_{day}_amrap",
+            label_visibility="visible"
         )
         
         # Queue for saving
@@ -292,9 +338,9 @@ for lift in today_exercises:
             if diff > 0:
                 st.success(f"🔥 +{diff} reps! New TM: {get_next_tm(current_tm, reps_done, stats['rep_out']):.1f}kg")
             elif diff == 0:
-                st.info("🎯 Hit the target! TM stays the same.")
+                st.info("🎯 Hit target. TM Holds.")
             else:
-                st.warning(f"📉 Missed target. TM decreases.")
+                st.warning(f"📉 Missed by {abs(diff)}. TM -2% to -5%.")
 
 # Accessories Section
 st.subheader("📓 Accessories")
