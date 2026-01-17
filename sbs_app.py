@@ -228,7 +228,9 @@ for lift in today_exercises:
     # Check if we have app history for the previous week
     prev_week_history = [v for v in history.values() if v['lift'] == lift and v['week'] == week - 1]
     
-    if planned and not prev_week_history:
+    # Force Week 16 to use Planned Weights (Start Fresh). 
+    # For Week 17+, use Planned unless we have history for the previous week.
+    if planned and (week == 16 or not prev_week_history):
         weight = planned
         current_tm = weight / stats['intensity'] if stats['intensity'] > 0 else 0
         tm_logs = [f"Using Planned Weight from Spreadsheet: {weight}kg"]
