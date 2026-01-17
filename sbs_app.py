@@ -116,61 +116,19 @@ MAIN_LIFTS = ["Squat", "Bench Press", "Deadlift", "OHP"]
 
 # Exact Progression derived from Spreadsheet Data
 # Format: (Intensity, Reps)
-# Note: Rep Out Target is usually Reps * 2, except for deloads or peaking.
 MAIN_SCHEDULE = [
-    (0.70, 5),  # W1
-    (0.75, 4),  # W2
-    (0.80, 3),  # W3
-    (0.725, 5), # W4
-    (0.775, 4), # W5
-    (0.825, 3), # W6
-    (0.75, 5),  # W7 (Deload/Pivot) - Data shows ~75% for 5
-    (0.80, 4),  # W8
-    (0.85, 3),  # W9
-    (0.90, 2),  # W10
-    (0.825, 4), # W11
-    (0.875, 3), # W12
-    (0.925, 2), # W13
-    (0.60, 5),  # W14 (Deload)
-    (0.85, 3),  # W15
-    (0.90, 2),  # W16 (Standard is 0.9, User saw 0.875 on Squat, 0.9 on Bench. Using 0.9 to be safe/std, or 0.875?)
-                # Bench W16: 90kg (Max 100) -> 0.9. Squat W16: 87.5 -> 0.875. 
-                # Let's use 0.875 to match the "lighter" observation if desired, but 0.9 is standard.
-                # User's data for W16: Squat 87.5, Bench 90. 
-                # I'll use 0.875 for Squat matching.
-    (0.95, 1),  # W17
-    (0.90, 2),  # W18
-    (0.95, 1),  # W19
-    (1.00, 1),  # W20
-    (0.65, 5)   # W21 (Peaking/Deload)
+    (0.7, 5), (0.75, 4), (0.8, 3), (0.725, 5), (0.775, 4), (0.825, 3), 
+    (0.6, 5), (0.75, 4), (0.8, 3), (0.85, 2), (0.775, 4), (0.825, 3), 
+    (0.875, 2), (0.6, 5), (0.8, 3), (0.875, 2), (0.925, 1), (0.875, 2), 
+    (0.925, 1), (0.975, 1), (0.6, 5)
 ]
 
-# Correction for W16 based on user input: Squat was 87.5.
-# If I put 0.875 here, it fits Squat.
-MAIN_SCHEDULE[15] = (0.875, 2) 
-
+# Aux Intensity (derived from Incline Press row)
 AUX_SCHEDULE = [
-    (0.60, 7),  # W1
-    (0.675, 6), # W2
-    (0.725, 5), # W3
-    (0.625, 7), # W4
-    (0.675, 6), # W5
-    (0.725, 5), # W6
-    (0.60, 7),  # W7 (Deload)
-    (0.70, 6),  # W8
-    (0.75, 5),  # W9
-    (0.80, 4),  # W10
-    (0.725, 6), # W11
-    (0.775, 5), # W12
-    (0.825, 4), # W13
-    (0.50, 7),  # W14 (Deload)
-    (0.75, 5),  # W15 (Target 10)
-    (0.80, 4),  # W16 (Target 8)
-    (0.85, 3),  # W17 (Target 6)
-    (0.80, 4),  # W18 (Target 8)
-    (0.85, 3),  # W19 (Target 6)
-    (0.90, 2),  # W20 (Target 4)
-    (0.60, 5)   # W21
+    (0.639, 7), (0.75, 6), (0.667, 5), (0.667, 7), (0.722, 6), (0.778, 5), 
+    (0.528, 5), (0.694, 6), (0.75, 5), (0.806, 4), (0.722, 6), (0.778, 5), 
+    (0.833, 4), (0.528, 5), (0.75, 5), (0.806, 4), (0.861, 3), (0.806, 4), 
+    (0.861, 3), (0.917, 2), (0.528, 5)
 ]
 
 def get_lift_stats(week, is_aux=False):
