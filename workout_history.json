@@ -593,5 +593,47 @@
         "lift": "DB OHP",
         "reps": 8,
         "target": 7
+    },
+    "Squat_w15_d1": {
+        "week": 15,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 6,
+        "target": 6
+    },
+    "Romanian Deadlift_w15_d1": {
+        "week": 15,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 14,
+        "target": 10
+    },
+    "Incline Press_w15_d1": {
+        "week": 15,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 11,
+        "target": 10
+    },
+    "Bench Press_w15_d2": {
+        "week": 15,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 7,
+        "target": 6
+    },
+    "OHP_w15_d2": {
+        "week": 15,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 7,
+        "target": 6
+    },
+    "Leg Press_w15_d2": {
+        "week": 15,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 10,
+        "target": 10
     }
 }
