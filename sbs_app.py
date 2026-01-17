@@ -56,7 +56,7 @@ def load_history():
 
 def save_history_entry(week, day, lift, reps, target):
     history = load_history()
-    key = f"{lift}_w{week}" # Unique key per lift per week
+    key = f"{lift}_w{week}_d{day}" # Unique key per lift per week per day
     history[key] = {
         "week": week,
         "day": day,
@@ -231,7 +231,7 @@ for lift in today_exercises:
     current_tm, tm_logs = calculate_current_tm(lift, base_tm, history, week)
     
     # Check if we have history for THIS week already to pre-fill
-    prev_entry_key = f"{lift}_w{week}"
+    prev_entry_key = f"{lift}_w{week}_d{day}"
     pre_filled_reps = history.get(prev_entry_key, {}).get("reps", stats['rep_out'])
     
     weight = round((current_tm * stats['intensity']) / rounding) * rounding
