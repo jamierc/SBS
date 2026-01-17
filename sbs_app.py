@@ -153,15 +153,18 @@ AUX_SCHEDULE = [
 ]
 
 # Exact Planned Weights from Spreadsheet (Weeks 16-21)
+# Keyed by (Lift Name, Day) to handle different weights for the same lift on different days
 PLANNED_WEIGHTS = {
-    "Squat": {16: 87.5, 17: 92.5, 18: 87.5, 19: 92.5, 20: 97.5, 21: 60.0},
-    "Romanian Deadlift": {16: 85.0, 17: 90.0, 18: 85.0, 19: 90.0, 20: 97.5, 21: 57.5},
-    "Incline Press": {16: 72.5, 17: 77.5, 18: 72.5, 19: 77.5, 20: 82.5, 21: 47.5},
-    "Bench Press": {16: 90.0, 17: 97.5, 18: 90.0, 19: 97.5, 20: 102.5, 21: 65.0},
-    "OHP": {16: 42.5, 17: 45.0, 18: 42.5, 19: 45.0, 20: 47.5, 21: 30.0},
-    "Leg Press": {16: 162.5, 17: 172.5, 18: 162.5, 19: 172.5, 20: 182.5, 21: 107.5},
-    "Deadlift": {16: 127.5, 17: 135.0, 18: 127.5, 19: 135.0, 20: 142.5, 21: 90.0},
-    "DB OHP": {16: 20.0, 17: 20.0, 18: 20.0, 19: 20.0, 20: 22.5, 21: 12.5}
+    ("Squat", 1): {16: 87.5, 17: 92.5, 18: 87.5, 19: 92.5, 20: 97.5, 21: 60.0},
+    ("Romanian Deadlift", 1): {16: 85.0, 17: 90.0, 18: 85.0, 19: 90.0, 20: 97.5, 21: 57.5},
+    ("Incline Press", 1): {16: 72.5, 17: 77.5, 18: 72.5, 19: 77.5, 20: 82.5, 21: 47.5},
+    ("Incline Press", 3): {16: 72.5, 17: 77.5, 18: 72.5, 19: 77.5, 20: 82.5, 21: 50.0},
+    ("Bench Press", 2): {16: 90.0, 17: 97.5, 18: 90.0, 19: 97.5, 20: 102.5, 21: 65.0},
+    ("OHP", 2): {16: 42.5, 17: 45.0, 18: 42.5, 19: 45.0, 20: 47.5, 21: 30.0},
+    ("Leg Press", 2): {16: 162.5, 17: 172.5, 18: 162.5, 19: 172.5, 20: 182.5, 21: 107.5},
+    ("Leg Press", 3): {16: 167.5, 17: 180.0, 18: 167.5, 19: 180.0, 20: 190.0, 21: 112.5},
+    ("Deadlift", 3): {16: 127.5, 17: 135.0, 18: 127.5, 19: 135.0, 20: 142.5, 21: 90.0},
+    ("DB OHP", 3): {16: 20.0, 17: 20.0, 18: 20.0, 19: 20.0, 20: 22.5, 21: 12.5}
 }
 
 def get_lift_stats(week, is_aux=False):
@@ -223,7 +226,7 @@ for lift in today_exercises:
     # use the PLANNED_WEIGHTS from the spreadsheet.
     # Otherwise, calculate dynamically.
     
-    planned = PLANNED_WEIGHTS.get(lift, {}).get(week)
+    planned = PLANNED_WEIGHTS.get((lift, day), {}).get(week)
     
     # Check if we have app history for the previous week
     prev_week_history = [v for v in history.values() if v['lift'] == lift and v['week'] == week - 1]
@@ -233,7 +236,7 @@ for lift in today_exercises:
     if planned and (week == 16 or not prev_week_history):
         weight = planned
         current_tm = weight / stats['intensity'] if stats['intensity'] > 0 else 0
-        tm_logs = [f"Using Planned Weight from Spreadsheet: {weight}kg"]
+        tm_logs = [f"Using Planned Weight from Spreadsheet (Day {day}): {weight}kg"]
     else:
         base_tm = maxes.get(lift, 0)
         current_tm, tm_logs = calculate_current_tm(lift, base_tm, history, week, is_aux=is_aux)
