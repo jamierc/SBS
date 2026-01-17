@@ -143,12 +143,7 @@ MAIN_SCHEDULE = [
 MAIN_SCHEDULE[15] = (0.875, 2) 
 
 AUX_SCHEDULE = [
-    (0.60, 7),  # W1 (Incline 57.5/90 ~ 0.63? RDL 72.5/100 ~ 0.72? 
-                # Wait, RDL W1 is 72.5? That's high for Aux. 
-                # Let's look at Incline W16: 67.5/90 = 0.75.
-                # RDL W16: 77.5/100 = 0.775.
-                # It seems RDL runs heavier.
-                # I'll use an average or "Hypertrophy" curve.
+    (0.60, 7),  # W1
     (0.675, 6), # W2
     (0.725, 5), # W3
     (0.625, 7), # W4
@@ -162,13 +157,13 @@ AUX_SCHEDULE = [
     (0.775, 5), # W12
     (0.825, 4), # W13
     (0.50, 7),  # W14 (Deload)
-    (0.725, 6), # W15 (Incline W15 67.5/90 = 0.75. RDL 77.5/100 = 0.775)
-    (0.775, 5), # W16 (Matches RDL 77.5% and Incline 75% approx)
-    (0.825, 4), # W17
-    (0.775, 5), # W18
-    (0.825, 4), # W19
-    (0.85, 3),  # W20
-    (0.50, 7)   # W21
+    (0.75, 5),  # W15 (Target 10)
+    (0.80, 4),  # W16 (Target 8)
+    (0.85, 3),  # W17 (Target 6)
+    (0.80, 4),  # W18 (Target 8)
+    (0.85, 3),  # W19 (Target 6)
+    (0.90, 2),  # W20 (Target 4)
+    (0.60, 5)   # W21
 ]
 
 def get_lift_stats(week, is_aux=False):
