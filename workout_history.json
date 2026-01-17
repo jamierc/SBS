@@ -1,0 +1,415 @@
+{
+    "Squat_w1_d1": {
+        "week": 1,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 10,
+        "target": 10
+    },
+    "Romanian Deadlift_w1_d1": {
+        "week": 1,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 17,
+        "target": 14
+    },
+    "Incline Press_w1_d1": {
+        "week": 1,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 21,
+        "target": 14
+    },
+    "Bench Press_w1_d2": {
+        "week": 1,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 12,
+        "target": 10
+    },
+    "OHP_w1_d2": {
+        "week": 1,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 10,
+        "target": 10
+    },
+    "Leg Press_w1_d2": {
+        "week": 1,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 20,
+        "target": 14
+    },
+    "Deadlift_w1_d3": {
+        "week": 1,
+        "day": 3,
+        "lift": "Deadlift",
+        "reps": 10,
+        "target": 10
+    },
+    "Incline Press_w1_d3": {
+        "week": 1,
+        "day": 3,
+        "lift": "Incline Press",
+        "reps": 20,
+        "target": 14
+    },
+    "Leg Press_w1_d3": {
+        "week": 1,
+        "day": 3,
+        "lift": "Leg Press",
+        "reps": 20,
+        "target": 14
+    },
+    "DB OHP_w1_d3": {
+        "week": 1,
+        "day": 3,
+        "lift": "DB OHP",
+        "reps": 14,
+        "target": 14
+    },
+    "Squat_w2_d1": {
+        "week": 2,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 5,
+        "target": 4
+    },
+    "Romanian Deadlift_w2_d1": {
+        "week": 2,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 5,
+        "target": 6
+    },
+    "Incline Press_w2_d1": {
+        "week": 2,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 5,
+        "target": 6
+    },
+    "Bench Press_w2_d2": {
+        "week": 2,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 5,
+        "target": 4
+    },
+    "OHP_w2_d2": {
+        "week": 2,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 5,
+        "target": 4
+    },
+    "Leg Press_w2_d2": {
+        "week": 2,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 5,
+        "target": 6
+    },
+    "Deadlift_w2_d3": {
+        "week": 2,
+        "day": 3,
+        "lift": "Deadlift",
+        "reps": 5,
+        "target": 4
+    },
+    "Incline Press_w2_d3": {
+        "week": 2,
+        "day": 3,
+        "lift": "Incline Press",
+        "reps": 5,
+        "target": 6
+    },
+    "Leg Press_w2_d3": {
+        "week": 2,
+        "day": 3,
+        "lift": "Leg Press",
+        "reps": 5,
+        "target": 6
+    },
+    "DB OHP_w2_d3": {
+        "week": 2,
+        "day": 3,
+        "lift": "DB OHP",
+        "reps": 5,
+        "target": 6
+    },
+    "Squat_w3_d1": {
+        "week": 3,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 6,
+        "target": 80
+    },
+    "Romanian Deadlift_w3_d1": {
+        "week": 3,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 10,
+        "target": 60
+    },
+    "Incline Press_w3_d1": {
+        "week": 3,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 10,
+        "target": 60
+    },
+    "Bench Press_w3_d2": {
+        "week": 3,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 6,
+        "target": 80
+    },
+    "OHP_w3_d2": {
+        "week": 3,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 6,
+        "target": 40
+    },
+    "Leg Press_w3_d2": {
+        "week": 3,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 10,
+        "target": 140
+    },
+    "Deadlift_w3_d3": {
+        "week": 3,
+        "day": 3,
+        "lift": "Deadlift",
+        "reps": 6,
+        "target": 115
+    },
+    "Incline Press_w3_d3": {
+        "week": 3,
+        "day": 3,
+        "lift": "Incline Press",
+        "reps": 10,
+        "target": 67
+    },
+    "Leg Press_w3_d3": {
+        "week": 3,
+        "day": 3,
+        "lift": "Leg Press",
+        "reps": 10,
+        "target": 140
+    },
+    "DB OHP_w3_d3": {
+        "week": 3,
+        "day": 3,
+        "lift": "DB OHP",
+        "reps": 10,
+        "target": 17
+    },
+    "Squat_w9_d1": {
+        "week": 9,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 5,
+        "target": 4
+    },
+    "Romanian Deadlift_w9_d1": {
+        "week": 9,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 5,
+        "target": 6
+    },
+    "Incline Press_w9_d1": {
+        "week": 9,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 5,
+        "target": 6
+    },
+    "Bench Press_w9_d2": {
+        "week": 9,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 5,
+        "target": 4
+    },
+    "OHP_w9_d2": {
+        "week": 9,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 5,
+        "target": 4
+    },
+    "Leg Press_w9_d2": {
+        "week": 9,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 5,
+        "target": 6
+    },
+    "Deadlift_w9_d3": {
+        "week": 9,
+        "day": 3,
+        "lift": "Deadlift",
+        "reps": 5,
+        "target": 4
+    },
+    "Incline Press_w9_d3": {
+        "week": 9,
+        "day": 3,
+        "lift": "Incline Press",
+        "reps": 5,
+        "target": 6
+    },
+    "Leg Press_w9_d3": {
+        "week": 9,
+        "day": 3,
+        "lift": "Leg Press",
+        "reps": 5,
+        "target": 6
+    },
+    "DB OHP_w9_d3": {
+        "week": 9,
+        "day": 3,
+        "lift": "DB OHP",
+        "reps": 5,
+        "target": 6
+    },
+    "Squat_w10_d1": {
+        "week": 10,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 6,
+        "target": 80
+    },
+    "Romanian Deadlift_w10_d1": {
+        "week": 10,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 10,
+        "target": 77
+    },
+    "Incline Press_w10_d1": {
+        "week": 10,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 10,
+        "target": 67
+    },
+    "Bench Press_w10_d2": {
+        "week": 10,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 6,
+        "target": 82
+    },
+    "OHP_w10_d2": {
+        "week": 10,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 6,
+        "target": 40
+    },
+    "Leg Press_w10_d2": {
+        "week": 10,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 10,
+        "target": 150
+    },
+    "Deadlift_w10_d3": {
+        "week": 10,
+        "day": 3,
+        "lift": "Deadlift",
+        "reps": 6,
+        "target": 120
+    },
+    "Incline Press_w10_d3": {
+        "week": 10,
+        "day": 3,
+        "lift": "Incline Press",
+        "reps": 10,
+        "target": 72
+    },
+    "Leg Press_w10_d3": {
+        "week": 10,
+        "day": 3,
+        "lift": "Leg Press",
+        "reps": 10,
+        "target": 157
+    },
+    "DB OHP_w10_d3": {
+        "week": 10,
+        "day": 3,
+        "lift": "DB OHP",
+        "reps": 10,
+        "target": 17
+    },
+    "Squat_w15_d1": {
+        "week": 15,
+        "day": 1,
+        "lift": "Squat",
+        "reps": 4,
+        "target": 3
+    },
+    "Romanian Deadlift_w15_d1": {
+        "week": 15,
+        "day": 1,
+        "lift": "Romanian Deadlift",
+        "reps": 8,
+        "target": 7
+    },
+    "Incline Press_w15_d1": {
+        "week": 15,
+        "day": 1,
+        "lift": "Incline Press",
+        "reps": 7,
+        "target": 7
+    },
+    "Bench Press_w15_d2": {
+        "week": 15,
+        "day": 2,
+        "lift": "Bench Press",
+        "reps": 4,
+        "target": 3
+    },
+    "OHP_w15_d2": {
+        "week": 15,
+        "day": 2,
+        "lift": "OHP",
+        "reps": 4,
+        "target": 3
+    },
+    "Leg Press_w15_d2": {
+        "week": 15,
+        "day": 2,
+        "lift": "Leg Press",
+        "reps": 8,
+        "target": 7
+    },
+    "Deadlift_w15_d3": {
+        "week": 15,
+        "day": 3,
+        "lift": "Deadlift",
+        "reps": 4,
+        "target": 3
+    },
+    "Incline Press_w15_d3": {
+        "week": 15,
+        "day": 3,
+        "lift": "Incline Press",
+        "reps": 7,
+        "target": 7
+    },
+    "DB OHP_w15_d3": {
+        "week": 15,
+        "day": 3,
+        "lift": "DB OHP",
+        "reps": 8,
+        "target": 7
+    }
+}
