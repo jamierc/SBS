@@ -91,6 +91,8 @@ def get_next_tm(current_tm, reps_done, target_reps):
 def calculate_current_tm(lift, base_max, history, current_week):
     """Iterates through history to calculate the TM for the CURRENT week."""
     tm = base_max
+    logs = [f"Base TM: {base_max}kg"]
+    
     # We only care about weeks BEFORE the current one to determine today's weight
     # Sort history by week to apply adjustments in order
     relevant_history = [
@@ -100,9 +102,14 @@ def calculate_current_tm(lift, base_max, history, current_week):
     relevant_history.sort(key=lambda x: x['week'])
     
     for entry in relevant_history:
+        prev_tm = tm
         tm = get_next_tm(tm, entry['reps'], entry['target'])
+        if tm != prev_tm:
+            logs.append(f"Week {entry['week']}: {entry['reps']} reps (Target {entry['target']}) -> TM {prev_tm:.1f}kg to {tm:.1f}kg")
+        else:
+            logs.append(f"Week {entry['week']}: {entry['reps']} reps (Target {entry['target']}) -> No Change")
         
-    return tm
+    return tm, logs
 
 # Programming data (Intensity, Reps, Rep Out Target, Sets)
 MAIN_LIFTS = ["Squat", "Bench Press", "Deadlift", "OHP"]
@@ -221,7 +228,7 @@ for lift in today_exercises:
 
     # 1. Calculate Weight
     base_tm = maxes.get(lift, 0)
-    current_tm = calculate_current_tm(lift, base_tm, history, week)
+    current_tm, tm_logs = calculate_current_tm(lift, base_tm, history, week)
     
     # Check if we have history for THIS week already to pre-fill
     prev_entry_key = f"{lift}_w{week}"
@@ -238,6 +245,9 @@ for lift in today_exercises:
     
     with st.expander(f"{header_status} **{lift}** — {weight}kg ({total_completed}/{stats['sets']} sets)", expanded=True):
         st.caption(f"Training Max: {current_tm:.1f}kg (Original: {base_tm}kg)")
+        with st.expander("📊 TM Calculation Details"):
+            for log in tm_logs:
+                st.text(log)
         
         # 1. Standard Sets Checkboxes
         st.write(f"**Working Sets:** {stats['sets']-1} sets of {stats['reps']}")
