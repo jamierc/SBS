@@ -1,8 +1,12 @@
 import streamlit as st
 import pandas as pd
+import json
+import os
 
 # --- APP CONFIGURATION ---
 st.set_page_config(page_title="SBS Strength Tracker", page_icon="💪", layout="centered")
+
+HISTORY_FILE = "workout_history.json"
 
 # --- DATA MAPPING (Extracted from your Spreadsheet) ---
 # Maps frequencies and days to specific exercises
@@ -38,6 +42,67 @@ EXERCISE_MAP = {
     "6": ["OHP"]
   }
 }
+
+# --- HELPER FUNCTIONS ---
+
+def load_history():
+    if not os.path.exists(HISTORY_FILE):
+        return {}
+    try:
+        with open(HISTORY_FILE, "r") as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        return {}
+
+def save_history_entry(week, day, lift, reps, target):
+    history = load_history()
+    key = f"{lift}_w{week}" # Unique key per lift per week
+    history[key] = {
+        "week": week,
+        "day": day,
+        "lift": lift,
+        "reps": reps,
+        "target": target
+    }
+    with open(HISTORY_FILE, "w") as f:
+        json.dump(history, f, indent=4)
+
+def get_next_tm(current_tm, reps_done, target_reps):
+    """Calculates the NEW Training Max based on AMRAP performance."""
+    diff = reps_done - target_reps
+    
+    if diff <= -2:
+        return current_tm * 0.95
+    elif diff == -1:
+        return current_tm * 0.98
+    elif diff == 0:
+        return current_tm # No change
+    elif diff == 1:
+        return current_tm * 1.005
+    elif diff == 2:
+        return current_tm * 1.01
+    elif diff == 3:
+        return current_tm * 1.015
+    elif diff == 4:
+        return current_tm * 1.02
+    else: # diff >= 5
+        return current_tm * 1.03
+
+def calculate_current_tm(lift, base_max, history, current_week):
+    """Iterates through history to calculate the TM for the CURRENT week."""
+    tm = base_max
+    # We only care about weeks BEFORE the current one to determine today's weight
+    # Sort history by week to apply adjustments in order
+    relevant_history = [
+        v for k, v in history.items() 
+        if v['lift'] == lift and v['week'] < current_week
+    ]
+    relevant_history.sort(key=lambda x: x['week'])
+    
+    for entry in relevant_history:
+        tm = get_next_tm(tm, entry['reps'], entry['target'])
+        
+    return tm
 
 # Programming data (Intensity, Reps, Rep Out Target, Sets)
 # This would normally be a large JSON; for this version, we use a helper function 
@@ -83,13 +148,21 @@ st.divider()
 # Get exercises for today
 today_exercises = EXERCISE_MAP[frequency].get(str(day), [])
 stats = get_lift_stats(week)
+history = load_history()
+
+# Store session data for saving later
+session_results = {}
 
 for lift in today_exercises:
     # 1. Calculate Weight
-    # Training Max (TM) would ideally be tracked in a database; 
-    # here we use the initial Max.
-    tm = maxes.get(lift, 0)
-    weight = round((tm * stats['intensity']) / rounding) * rounding
+    base_tm = maxes.get(lift, 0)
+    current_tm = calculate_current_tm(lift, base_tm, history, week)
+    
+    # Check if we have history for THIS week already to pre-fill
+    prev_entry_key = f"{lift}_w{week}"
+    pre_filled_reps = history.get(prev_entry_key, {}).get("reps", stats['rep_out'])
+    
+    weight = round((current_tm * stats['intensity']) / rounding) * rounding
     
     # Calculate completion
     completed_sets = sum([st.session_state.get(f"{lift}_{week}_{day}_s{i+1}", False) for i in range(stats['sets']-1)])
@@ -99,6 +172,8 @@ for lift in today_exercises:
     header_status = "✅" if total_completed == stats['sets'] else "🔄"
     
     with st.expander(f"{header_status} **{lift}** — {weight}kg ({total_completed}/{stats['sets']} sets)", expanded=True):
+        st.caption(f"Training Max: {current_tm:.1f}kg (Original: {base_tm}kg)")
+        
         # 1. Standard Sets Checkboxes
         st.write(f"**Working Sets:** {stats['sets']-1} sets of {stats['reps']}")
         set_cols = st.columns(stats['sets']-1)
@@ -111,29 +186,39 @@ for lift in today_exercises:
         c1, c2 = st.columns([1, 2])
         c1.metric("Rep Out Goal", f"{stats['rep_out']}+")
         
-        # Default to the rep_out goal to reduce clicks
+        # Default to the rep_out goal or saved value
         reps_done = c2.number_input(
             f"Actual reps on final set", 
             min_value=0, 
             max_value=50, 
-            value=stats['rep_out'], 
+            value=pre_filled_reps, 
             key=f"{lift}_{week}_{day}_amrap"
         )
+        
+        # Queue for saving
+        session_results[lift] = {
+            "reps": reps_done, 
+            "target": stats['rep_out']
+        }
         
         # User Interaction Logic
         diff = reps_done - stats['rep_out']
         if reps_done > 0:
             if diff > 0:
-                st.success(f"🔥 +{diff} reps! Increase Training Max for next week.")
+                st.success(f"🔥 +{diff} reps! New TM: {get_next_tm(current_tm, reps_done, stats['rep_out']):.1f}kg")
             elif diff == 0:
-                st.info("🎯 Hit the target! Training Max stays the same.")
+                st.info("🎯 Hit the target! TM stays the same.")
             else:
-                st.warning(f"📉 Missed target by {abs(diff)} reps.")
+                st.warning(f"📉 Missed target. TM decreases.")
 
 # Accessories Section
 st.subheader("📓 Accessories")
 st.text_area("Notes for accessories (Back, Biceps, Delts, etc.)", placeholder="e.g. Lat Pulldowns 3x12 @ 60kg")
 
 if st.button("Complete Workout"):
+    # Save all AMRAPs from this session
+    for lift, data in session_results.items():
+        save_history_entry(week, day, lift, data['reps'], data['target'])
+    
     st.balloons()
-    st.success("Workout Saved! (Progress is tracked locally in the session)")
+    st.success(f"Workout Saved! Data written to {HISTORY_FILE}")
