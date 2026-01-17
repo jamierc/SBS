@@ -88,40 +88,47 @@ def get_next_tm(current_tm, reps_done, target_reps):
     else: # diff >= 5
         return current_tm * 1.03
 
+# Spreadsheet Training Maxes at the start of Week 16
+W16_TM_ANCHORS = {
+    "Squat": 100.0, # Reset to 100 as per user request for Week 16 matching
+    "Romanian Deadlift": 106.25, # Derived from 85kg / 0.8 intensity? No, user saw 85 in app but maybe wants 82.5.
+    "Incline Press": 90.0,
+    "Bench Press": 100.0,
+    "OHP": 50.0,
+    "Leg Press": 190.0,
+    "Deadlift": 140.0,
+    "DB OHP": 25.0
+}
+
+# Override with exact spreadsheet values found
+W16_TM_ANCHORS = {
+    "Squat": 101.5,
+    "Romanian Deadlift": 113.7,
+    "Incline Press": 96.0,
+    "Bench Press": 107.2,
+    "OHP": 50.2,
+    "Leg Press": 216.0,
+    "Deadlift": 150.8,
+    "DB OHP": 25.5
+}
+
 def calculate_current_tm(lift, base_max, history, current_week, is_aux):
-    """Iterates through history to calculate the TM, resetting based on actual weights if available."""
-    tm = base_max
-    logs = [f"Base TM: {base_max}kg"]
+    """Calculates TM starting from the Week 16 Spreadsheet Anchor."""
+    # Start with the Spreadsheet's Week 16 TM
+    tm = W16_TM_ANCHORS.get(lift, base_max)
+    logs = [f"W16 Spreadsheet Anchor: {tm}kg"]
     
-    # We only care about weeks BEFORE the current one to determine today's weight
+    # Only apply history recorded IN THE APP from Week 16 onwards
     relevant_history = [
         v for k, v in history.items() 
-        if v['lift'] == lift and v['week'] < current_week
+        if v['lift'] == lift and 16 <= v['week'] < current_week
     ]
     relevant_history.sort(key=lambda x: x['week'])
     
     for entry in relevant_history:
-        # 1. Self-Correction: If we have the actual weight used, strictly base TM off that
-        # This fixes drift if the user manually adjusted weights in the past
-        if "weight" in entry and entry["weight"] > 0:
-            # Recover the intensity used that week
-            stats = get_lift_stats(entry['week'], is_aux=is_aux)
-            if stats['intensity'] > 0:
-                recovered_tm = entry['weight'] / stats['intensity']
-                
-                # Only reset if it's significantly different (ignore small rounding noise)
-                # actually, always reset to trust the spreadsheet "truth"
-                tm = recovered_tm
-                logs.append(f"Week {entry['week']}: Lifted {entry['weight']}kg (@ {stats['intensity']*100:.1f}%) -> Implied TM {tm:.1f}kg")
-
-        # 2. Apply Progression Logic
         prev_tm = tm
         tm = get_next_tm(tm, entry['reps'], entry['target'])
-        
-        if tm != prev_tm:
-            logs.append(f"Week {entry['week']} Result: {entry['reps']} reps (Target {entry['target']}) -> Adjusted TM to {tm:.1f}kg")
-        else:
-            logs.append(f"Week {entry['week']} Result: Hit Target -> TM Holds")
+        logs.append(f"Week {entry['week']} (App Log): {entry['reps']} reps -> TM {tm:.1f}kg")
         
     return tm, logs
 
