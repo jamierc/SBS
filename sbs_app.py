@@ -88,13 +88,12 @@ def get_next_tm(current_tm, reps_done, target_reps):
     else: # diff >= 5
         return current_tm * 1.03
 
-def calculate_current_tm(lift, base_max, history, current_week):
-    """Iterates through history to calculate the TM for the CURRENT week."""
+def calculate_current_tm(lift, base_max, history, current_week, is_aux):
+    """Iterates through history to calculate the TM, resetting based on actual weights if available."""
     tm = base_max
     logs = [f"Base TM: {base_max}kg"]
     
     # We only care about weeks BEFORE the current one to determine today's weight
-    # Sort history by week to apply adjustments in order
     relevant_history = [
         v for k, v in history.items() 
         if v['lift'] == lift and v['week'] < current_week
@@ -102,12 +101,27 @@ def calculate_current_tm(lift, base_max, history, current_week):
     relevant_history.sort(key=lambda x: x['week'])
     
     for entry in relevant_history:
+        # 1. Self-Correction: If we have the actual weight used, strictly base TM off that
+        # This fixes drift if the user manually adjusted weights in the past
+        if "weight" in entry and entry["weight"] > 0:
+            # Recover the intensity used that week
+            stats = get_lift_stats(entry['week'], is_aux=is_aux)
+            if stats['intensity'] > 0:
+                recovered_tm = entry['weight'] / stats['intensity']
+                
+                # Only reset if it's significantly different (ignore small rounding noise)
+                # actually, always reset to trust the spreadsheet "truth"
+                tm = recovered_tm
+                logs.append(f"Week {entry['week']}: Lifted {entry['weight']}kg (@ {stats['intensity']*100:.1f}%) -> Implied TM {tm:.1f}kg")
+
+        # 2. Apply Progression Logic
         prev_tm = tm
         tm = get_next_tm(tm, entry['reps'], entry['target'])
+        
         if tm != prev_tm:
-            logs.append(f"Week {entry['week']}: {entry['reps']} reps (Target {entry['target']}) -> TM {prev_tm:.1f}kg to {tm:.1f}kg")
+            logs.append(f"Week {entry['week']} Result: {entry['reps']} reps (Target {entry['target']}) -> Adjusted TM to {tm:.1f}kg")
         else:
-            logs.append(f"Week {entry['week']}: {entry['reps']} reps (Target {entry['target']}) -> No Change")
+            logs.append(f"Week {entry['week']} Result: Hit Target -> TM Holds")
         
     return tm, logs
 
@@ -186,7 +200,7 @@ for lift in today_exercises:
 
     # 1. Calculate Weight
     base_tm = maxes.get(lift, 0)
-    current_tm, tm_logs = calculate_current_tm(lift, base_tm, history, week)
+    current_tm, tm_logs = calculate_current_tm(lift, base_tm, history, week, is_aux=is_aux)
     
     # Check if we have history for THIS week already to pre-fill
     prev_entry_key = f"{lift}_w{week}_d{day}"
